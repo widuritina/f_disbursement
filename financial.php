@@ -71,7 +71,7 @@
 				} else {
 					header("Location: $receipt");
 				}
-				
+			mysqli_close($dbConn);		
 			} else {
 				echo "User not found.";
 				mysqli_close($dbConn);

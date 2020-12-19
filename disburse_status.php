@@ -19,7 +19,6 @@
 		if(isset($_POST['submit'])){
 			$username= $_POST['username'];
 			$id= $_POST['id'];
-			echo
 			
 			$query="SELECT * from disburse_db where username ='$username' and id ='$id';";
 			$result=mysqli_query($dbConn, $query);		
@@ -72,6 +71,8 @@
 					
 					$query="UPDATE disburse_db SET status='$status', receipt='$receipt' WHERE id='$id' and username='$username';";
 					query_db($query);
+					mysqli_close($dbConn);
+
 					header("Location: $receipt");
 
 				} 
