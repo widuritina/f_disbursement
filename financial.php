@@ -31,36 +31,46 @@
 			
 			if($resultcheck>0) {
 				while ($rows=mysqli_fetch_assoc($result)) {
-					/*echo "<br><br>"; echo "Username: "; echo $rows['username']; 
-					echo "<br>";echo "Bank Code: "; echo 
-					echo "<br>";echo "Account Number: "; echo 
+					echo "<br><br>"; 
+					echo "<br>";echo "Username: "; echo $rows['username']; 
+					echo "<br>";echo "Bank Code: "; echo $bank_code=$rows['bank_code']; 
+					echo "<br>";echo "Account Number: "; echo $account_number=$rows['account_number']; 
 					echo "<br>";echo "Amount: Rp."; echo $amount; 
 					echo "<br>";echo "Remark: "; echo $remark; 
-					echo "<br>";echo "Time: "; echo */
-					$bank_code=$rows['bank_code']; 
-					$account_number=$rows['account_number']; 
-					$timestamp=strftime("%Y-%m-%d %X"); 
+					echo "<br>";echo "..sending disburse request.. ";
 				}
 
 //curl to slightly-big flip				
-				$output=http_disburse_req("https://api.github.com/users/petanikode", $bank_code, $account_number, $amount, $remark);
+				$output=http_disburse_req("https://nextar.flip.id/disburse", $bank_code, $account_number, $amount, $remark);
 				$output = json_decode($output, TRUE);
 				/*echo "<pre>";
 				print_r($output);
 				echo "</pre>";*/
 			
+				
+				echo"<br>"; echo "<br>"; echo "..accepting response.. "; 			
 				echo"<br>"; echo "Username: "; 			echo $username;
 				echo"<br>"; echo "Id: "; 				echo $id=$output["id"];
-				echo"<br>"; echo "Bank Code: ";			echo $bank_code=$output["public_repos"];
-				echo"<br>"; echo "Account Number: ";	echo $account_number=$output["followers"];
-				echo"<br>"; echo "Amount: "; 			echo $amount=$output["following"];
-				echo"<br>"; echo "Remark: "; 			echo $remark=$output["node_id"];
-				echo"<br>"; echo "Status: "; 			echo $status=$output["type"];
-				echo"<br>"; echo "Beneficiary Name: "; 	echo $benef_name=$output["name"];
-				echo"<br>"; echo "Timestamp: "; 		echo $timestamp=$output["updated_at"];
-				//insert_db($username, $bank_code, $account_number, $amount, $remark, $status, $benef_name, $timestamp, $id);
+				echo"<br>"; echo "Bank Code: ";			echo $bank_code=$output["bank_code"];
+				echo"<br>"; echo "Account Number: ";	echo $account_number=$output["account_number"];
+				echo"<br>"; echo "Amount: "; 			echo $amount=$output["amount"];
+				echo"<br>"; echo "Remark: "; 			echo $remark=$output["remark"];
+				echo"<br>"; echo "Status: "; 			echo $status=$output["status"];
+				echo"<br>"; echo "Beneficiary Name: "; 	echo $benef_name=$output["beneficiary_name"];
+				echo"<br>"; echo "Timestamp: "; 		echo $timestamp=$output["time_served"];
+				echo"<br>"; echo "Receipt: "; 			echo $output["receipt"];
+				
+				
 				$query="INSERT INTO disburse_db (username, bank_code, account_number, amount, remark, status, benef_name,timestamp, id) VALUES ('$username', '$bank_code', '$account_number', '$amount', '$remark', '$status', '$benef_name', '$timestamp', '$id');";
-				query_db($query);			
+				query_db($query);	
+
+				$receipt=$output['receipt'];
+				if (strcmp($status,"SUCCESS")!=0) {
+					echo "<br>"; echo "Your disbursement status is "; echo $status; 
+					echo "<br>"; echo "Please check into status activity.";
+				} else {
+					header("Location: '$receipt'");
+				}
 				
 			} else {
 				echo "User not found.";

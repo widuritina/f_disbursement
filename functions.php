@@ -13,7 +13,7 @@
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
 			
 //to send data to Slightly-big flip
-			/*curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POST, 1);
 			$payloads = [
 				"bank_code" => $bank_code,
 				"account_number" => $account_number,
@@ -22,8 +22,8 @@
 			];
 			curl_setopt($ch, CURLOPT_POSTFIELDS,$a=http_build_query($payloads)); //echo"<br>";echo($a);
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array( "Content-Type: application/x-www-form-urlencoded"));
-			curl_setopt($ch, CURLOPT_USERPWD, "xyz");
-			*/
+			curl_setopt($ch, CURLOPT_USERPWD, "HyzioY7LP6ZoO7nTYKbG8O4ISkyWnX1JvAEVAhtWKZumooCzqp41");
+			
 //end of Slightly-big flip
 			
 			$output = curl_exec($ch); 
@@ -36,7 +36,8 @@
 			curl_setopt($ch, CURLOPT_URL, "$url");	
 			curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-					
+			curl_setopt($ch, CURLOPT_USERPWD, "HyzioY7LP6ZoO7nTYKbG8O4ISkyWnX1JvAEVAhtWKZumooCzqp41");
+
 			$output = curl_exec($ch); 
 			curl_close($ch);  
 			return $output;
@@ -44,7 +45,7 @@
 		
 		function query_db($query) {
 			require 'db_connection.php';
-			echo "<br>";echo($query);
+			//echo "<br>";echo($query);
 			if(mysqli_query($dbConn, $query)) {
 				echo"<br>";echo("Data inserted");
 			} else {

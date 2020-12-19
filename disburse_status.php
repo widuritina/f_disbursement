@@ -22,10 +22,7 @@
 			echo
 			
 			$query="SELECT * from disburse_db where username ='$username' and id ='$id';";
-			$result=mysqli_query($dbConn, $query);
-
-			//echo(mysqli_error($dbConn));
-			
+			$result=mysqli_query($dbConn, $query);		
 			$resultcheck=mysqli_num_rows($result);
 			if($resultcheck>0) {
 				$amount="";
@@ -44,33 +41,36 @@
 					$id=$rows['id'];
 				}
 				
-//chech status in db				
-				if (strcmp($status, "Success")==0) {
+//check status in db				
+				if (strcmp($status, "SUCCESS")==0) {
 					echo "<br>";echo "";
 				} else {
-					echo "<br>";echo "<br>";
-					echo "..need to send another check status..";
-//send disbursment status request
-					$disbursecheck="https://api.github.com/users/petanikode/{{$id}}";
-					echo $disbursecheck;
-					$output=http_disburse_stat("https://api.github.com/users/petanikode"); //
-					$output = json_decode($output, TRUE);
-					/*echo "<pre>";
-					print_r($output);
-					echo "</pre>";*/
 					
+					echo "<br>";
+					echo "<br>";echo "..need to send another check status..";
+					echo "<br>";echo "..accepting response..";	
+					
+//send disbursment status request
+					$output=http_disburse_stat("https://nextar.flip.id/disburse/{$id}"); //
+					$output = json_decode($output, TRUE);
+					
+					echo "<pre>";
+					print_r($output);
+					echo "</pre>";
 					echo"<br>"; echo "Username: "; 			echo $username;
 					echo"<br>"; echo "Id: "; 				echo $id=$output["id"];
-					echo"<br>"; echo "Bank Code: ";			echo $bank_code=$output["public_repos"];
-					echo"<br>"; echo "Account Number: ";	echo $account_number=$output["followers"];
-					echo"<br>"; echo "Amount: "; 			echo $amount=$output["following"];
-					echo"<br>"; echo "Remark: "; 			echo $remark=$output["node_id"];
-					echo"<br>"; echo "Status: "; 			echo $status=$output["type"];
-					echo"<br>"; echo "Beneficiary Name: "; 	echo $benef_name=$output["name"];
-					echo"<br>"; echo "Timestamp: "; 		echo $timestamp=$output["updated_at"];
+					echo"<br>"; echo "Bank Code: ";			echo $bank_code=$output["bank_code"];
+					echo"<br>"; echo "Account Number: ";	echo $account_number=$output["account_number"];
+					echo"<br>"; echo "Amount: "; 			echo $amount=$output["amount"];
+					echo"<br>"; echo "Remark: "; 			echo $remark=$output["remark"];
+					echo"<br>"; echo "Status: "; 			echo $status=$output["status"];
+					echo"<br>"; echo "Beneficiary Name: "; 	echo $benef_name=$output["beneficiary_name"];
+					echo"<br>"; echo "Timestamp: "; 		echo $timestamp=$output["time_served"];
+					
 					$query="UPDATE disburse_db SET status='$status' WHERE id='$id' and username='$username';";
 					query_db($query);
-			
+			header("Location: https://flip-receipt.oss-ap-southeast-5.aliyuncs.com/debit_receipt/126316_3d07f9fef9612c7275b3c36f7e1e5762.jpg");
+
 				} 
 			} 
 			else {
@@ -82,7 +82,6 @@
 		}
 
 	?>
-	
 
 	</body>
 
