@@ -59,17 +59,17 @@
 				echo"<br>"; echo "Beneficiary Name: "; 	echo $benef_name=$output["beneficiary_name"];
 				echo"<br>"; echo "Timestamp: "; 		echo $timestamp=$output["time_served"];
 				echo"<br>"; echo "Receipt: "; 			echo $output["receipt"];
+				$receipt=$output['receipt'];
 				
-				
-				$query="INSERT INTO disburse_db (username, bank_code, account_number, amount, remark, status, benef_name,timestamp, id) VALUES ('$username', '$bank_code', '$account_number', '$amount', '$remark', '$status', '$benef_name', '$timestamp', '$id');";
+				$query="INSERT INTO disburse_db (username, bank_code, account_number, amount, remark, status, benef_name,timestamp, id, receipt) VALUES ('$username', '$bank_code', '$account_number', '$amount', '$remark', '$status', '$benef_name', '$timestamp', '$id', '$receipt');";
 				query_db($query);	
 
-				$receipt=$output['receipt'];
+				
 				if (strcmp($status,"SUCCESS")!=0) {
 					echo "<br>"; echo "Your disbursement status is "; echo $status; 
 					echo "<br>"; echo "Please check into status activity.";
 				} else {
-					header("Location: '$receipt'");
+					header("Location: $receipt");
 				}
 				
 			} else {

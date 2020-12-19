@@ -39,11 +39,13 @@
 					*/
 					$status=$rows['status'];
 					$id=$rows['id'];
+					$receipt=$rows['receipt'];
 				}
 				
 //check status in db				
 				if (strcmp($status, "SUCCESS")==0) {
-					echo "<br>";echo "";
+					header("Location: $receipt");
+					
 				} else {
 					
 					echo "<br>";
@@ -66,10 +68,11 @@
 					echo"<br>"; echo "Status: "; 			echo $status=$output["status"];
 					echo"<br>"; echo "Beneficiary Name: "; 	echo $benef_name=$output["beneficiary_name"];
 					echo"<br>"; echo "Timestamp: "; 		echo $timestamp=$output["time_served"];
+					$receipt=$output['receipt'];
 					
-					$query="UPDATE disburse_db SET status='$status' WHERE id='$id' and username='$username';";
+					$query="UPDATE disburse_db SET status='$status', receipt='$receipt' WHERE id='$id' and username='$username';";
 					query_db($query);
-			header("Location: https://flip-receipt.oss-ap-southeast-5.aliyuncs.com/debit_receipt/126316_3d07f9fef9612c7275b3c36f7e1e5762.jpg");
+					header("Location: $receipt");
 
 				} 
 			} 
